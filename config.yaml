@@ -1,0 +1,10 @@
+addr: 127.0.0.1:8083
+pprof: /_pprof
+cert: cert.pem
+key: key.pem
+log: 
+    file:
+    level: all
+auth:
+    username: ghub
+    password: xxxxxxxx
