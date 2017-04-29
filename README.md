@@ -1,2 +1,3 @@
 # ghubd
-Proxy daemon of access control systems, connect CiviCRM and devices
+
+Based on [gleam](https://github.com/mikespook/gleam)
