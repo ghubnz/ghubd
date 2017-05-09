@@ -1,20 +1,30 @@
-Log("Initialisation")
+-- RISK is the danger zone and has to be loaded first
+RISK = require("RISK")
 
 http = require("http")
 url = require("url")
 json = require("json")
 civi = require("civicrm")
 
-config.Brokers = {"tcp://iot.eclipse.org:1883"}
-config.Prefix = "gleam"
-config.ClientId = "testing"
-config.StateUpdate = 30
-config.Tasks = {}
-config.Tasks["rfid"] = 0
-config.Tasks["test2"] = 0
-config.Tasks["test3"] = 0
+Logf("Initialisation")
 
-function DefaultPublishHandler(c,m)
+config.MQTT = {
+	{
+		Addr = "tcp://api.ghub.nz:8883",
+		Username = RISK.MQTT.Username,
+		Password = RISK.MQTT.Password,
+	}
+}
+config.Prefix = "iot"
+config.ClientId = "hub"
+config.Tasks = {}
+-- Topic: iot/rfid
+config.Tasks["rfid"] = 0
+-- TODO
+config.Schedule.Tick = 1000
+config.Schedule.Tasks = {}
+config.Schedule.Tasks["task1"] = 5000
+
+function DefaultPublishHandler(c,m) 
 	Log(m.Payload)
 end
-

@@ -1,8 +1,4 @@
-local cfgCiviCRM = {
-	API = "https://ghub.nz/sites/all/modules/civicrm/extern/rest.php",
-	siteKey = "",
-	userKey = "",
-}
+local cfgCiviCRM = RISK.CiviCRM
 function getContactByExtID(eid)
 	local params = {
 		entity="contact",
