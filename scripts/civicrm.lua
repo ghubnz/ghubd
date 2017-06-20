@@ -1,5 +1,8 @@
 local cfgCiviCRM = RISK.CiviCRM
-function getContactByExtID(eid)
+
+local _M = {}
+
+function _M.getContactByExtID(eid)
 	local params = {
 		entity="contact",
 		action="get",
@@ -28,3 +31,5 @@ function getContactByExtID(eid)
 	local key = next(data.values)
 	return data.values[key], nil
 end
+
+return _M
