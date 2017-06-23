@@ -8,7 +8,7 @@ tasks = require("tasks")
 utils = require("utils")
 
 -- global variables
-Prefix = "ghub"
+Prefix = "iot"
 
 config.MQTT = {
 	{
