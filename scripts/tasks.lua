@@ -19,4 +19,14 @@ function _M.RFID(client, msg)
 	end
 end
 
+
+function _M.Heartbeat(client, msg) 
+	-- TODO record heartbeat timestamp
+	logf("Heartbeat: %s", msg.Payload)
+end
+
+function _M.Notification(client, ctx)
+	-- TODO based on heartbeat to send out notification
+end
+
 return _M
