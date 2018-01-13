@@ -25,6 +25,7 @@ config.Tasks = {}
 config.Tasks["tasks.RFID"] = {}
 config.Tasks["tasks.RFID"][Prefix .. ":rfid"] = 0
 -- TODO customise heartbeat topic
+config.Tasks["tasks.Heartbeat"] = {}
 config.Tasks["tasks.Heartbeat"]["hub:heartbeat"] = 0
 
 config.Schedule.Tick = 1000
