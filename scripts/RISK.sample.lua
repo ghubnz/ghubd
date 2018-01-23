@@ -1,10 +1,16 @@
-MQTT = {
-	Username = "",
-	Password = ""	
+local _M = {
+	MQTT = {
+		Addr = "",
+		Username = "",
+		Password = ""	
+	},
+	CiviCRM = {
+		API = "",
+		siteKey = "",
+		userKey = "",
+	}
+	Slack = {
+		RFIDHook = ""
+	}
 }
-
-CiviCRM = {
-	API = "",
-	siteKey = "",
-	userKey = "",
-}
+return _M

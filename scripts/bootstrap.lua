@@ -24,14 +24,16 @@ config.ClientId = utils.getClientId()
 config.Tasks = {}
 config.Tasks["tasks.RFID"] = {}
 config.Tasks["tasks.RFID"][Prefix .. ":rfid"] = 0
--- TODO customise heartbeat topic
+
 config.Tasks["tasks.Heartbeat"] = {}
-config.Tasks["tasks.Heartbeat"]["hub:heartbeat"] = 0
+config.Tasks["tasks.Heartbeat"]["hub:heartbeat"] = 0 -- backwards
+config.Tasks["tasks.Heartbeat"][Prefix .. ":heartbeat"] = 0
+
 
 config.Schedule.Tick = 1000
 -- fn: tick
 config.Schedule.Tasks = {}
-config.Schedule.Tasks["tasks.Notification"] = 600
+config.Schedule.Tasks["tasks.Notification"] = 5 * 60 * 1000
 
 -- functions
 function onDefaultMessage(client, msg) 
