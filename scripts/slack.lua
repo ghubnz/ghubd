@@ -17,9 +17,10 @@ function _M.noHeartBeats(device, t)
 	local ts = now - t[timestamp]
 	if ts < (60 * 10) then
 		if t[lastNotice] ~= "" then
-		local txt = string.format("`%s` recovered", device)	
-		log(txt)
-		_M.postMessage(cfgSlack.RFIDHook, txt)
+			local txt = string.format("`%s` recovered", device)	
+			log(txt)
+			_M.postMessage(cfgSlack.RFIDHook, txt)
+		end
 		return ""
 	end
 
