@@ -1,5 +1,4 @@
 civi = require("civicrm")
-slack = require("slack")
 
 local _M = {}
 
@@ -38,7 +37,10 @@ end
 function _M.Notification(client, ctx)
 	-- based on heartbeat to send out notification
 	for device, t in pairs(beats) do
-		beats[device][lastNotice] = slack.noHeartBeats(device, t)
+		if type(beats[device]) ~= "table" then
+			beats[device] = {}
+		end
+		beats[device].lastNotice = slack.noHeartBeats(device, t)
 	end
 end
 

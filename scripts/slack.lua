@@ -13,6 +13,9 @@ function _M.swapEvent(name, device, rfid)
 end
 
 function _M.noHeartBeats(device, t)
+	if type(t[timestamp]) ~= number then
+		return ""
+	end
 	local now = os.time()
 	local ts = now - t[timestamp]
 	if ts < (60 * 10) then

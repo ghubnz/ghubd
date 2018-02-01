@@ -6,6 +6,7 @@ url = require("url")
 json = require("json")
 tasks = require("tasks")
 utils = require("utils")
+slack = require("slack")
 
 -- global variables
 Prefix = "iot"
@@ -50,6 +51,7 @@ function afterInit(client)
 	if token:Wait() and token:Error() ~= nil then
 		logf("onAfterInit: %s", err(err(token)))
 	end
+	slack.postMessage(RISK.Slack.RFIDHook, string.format("%s initialised", config.ClientId))	
 end
 
 function beforeFinalize(client)
@@ -64,10 +66,13 @@ function beforeFinalize(client)
 	end
 end
 
-function onError(ctx, e)
+function onError(e, ctx)
 	logf("%s: %s", ctx.Id, err(e))
 end
 
 function err(e)
-	return e:Error()
+	if type(e.Error) == "function" then
+		return e:Error()
+	end
+	return e
 end
