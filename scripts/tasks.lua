@@ -29,17 +29,16 @@ beats = {}
 
 function _M.Heartbeat(client, msg) 
 	-- record heartbeat timestamp
-	beats[msg.Payload] = os.time()
+	beats[msg.Payload] = {
+		timestamp = os.time(),
+		lastNotice = ""
+	}
 end
 
 function _M.Notification(client, ctx)
 	-- based on heartbeat to send out notification
-	local now = os.time()
 	for device, t in pairs(beats) do
-		local a = now - t
-		if a > (10 * 60) then
-			slack.noHeartBeats(device, a)
-		end
+		beats[device][lastNotice] = slack.noHeartBeats(device, t)
 	end
 end
 
