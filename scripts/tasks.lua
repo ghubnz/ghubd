@@ -29,10 +29,16 @@ beats = {}
 
 function _M.Heartbeat(client, msg) 
 	-- record heartbeat timestamp
-	if beats[msg.Payload] ~= nil and beats[msg.Payload].lastNotice ~= "" then
-		local txt = string.format("`%s` recovered", msg.Payload)	
+	if beats[msg.Payload] == nil then
+		local txt = string.format("`%s` initialised", msg.Payload)	
 		log(txt)
-		slack.postMessage(RISK.Slack.RFIDHook, txt)
+		slack.postMessage(RISK.Slack.RFIDHook, txt)		
+	else
+		if beats[msg.Payload].lastNotice ~= "" then
+			local txt = string.format("`%s` recovered", msg.Payload)	
+			log(txt)
+			slack.postMessage(RISK.Slack.RFIDHook, txt)
+		end
 	end
 	beats[msg.Payload] = {
 		timestamp = os.time(),
