@@ -51,7 +51,7 @@ function afterInit(client)
 	if token:Wait() and token:Error() ~= nil then
 		logf("onAfterInit: %s", err(err(token)))
 	end
-	slack.postMessage(RISK.Slack.RFIDHook, string.format("%s initialised", config.ClientId))	
+	slack.postMessage(RISK.Slack.RFIDHook, string.format("%s initialised", config.ClientId))
 end
 
 function beforeFinalize(client)
@@ -67,7 +67,7 @@ function beforeFinalize(client)
 end
 
 function onError(e, ctx)
-	logf("%s: %s", ctx.Id, err(e))
+	logf("%s: %s", ctx.Id, e)
 end
 
 function err(e)

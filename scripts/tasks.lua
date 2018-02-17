@@ -1,4 +1,5 @@
 civi = require("civicrm")
+slack = require("slack")
 
 local _M = {}
 
@@ -28,10 +29,16 @@ beats = {}
 
 function _M.Heartbeat(client, msg) 
 	-- record heartbeat timestamp
+	if beats[msg.Payload] ~= nil and beats[msg.Payload].lastNotice ~= "" then
+		local txt = string.format("`%s` recovered", msg.Payload)	
+		log(txt)
+		slack.postMessage(RISK.Slack.RFIDHook, txt)
+	end
 	beats[msg.Payload] = {
 		timestamp = os.time(),
 		lastNotice = ""
 	}
+	logf("Heartbeat(%s)", msg.Payload)
 end
 
 function _M.Notification(client, ctx)

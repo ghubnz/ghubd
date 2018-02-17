@@ -13,17 +13,14 @@ function _M.swapEvent(name, device, rfid)
 end
 
 function _M.noHeartBeats(device, t)
-	if type(t[timestamp]) ~= number then
+	if type(t.timestamp) ~= "number" then
 		return ""
 	end
 	local now = os.time()
-	local ts = now - t[timestamp]
-	if ts < (60 * 10) then
-		if t[lastNotice] ~= "" then
-			local txt = string.format("`%s` recovered", device)	
-			log(txt)
-			_M.postMessage(cfgSlack.RFIDHook, txt)
-		end
+	local ts = now - t.timestamp
+	log("TS:", ts, " LN:", t.lastNotice)
+
+	if ts < (6 * 10) then
 		return ""
 	end
 
@@ -46,7 +43,7 @@ function _M.noHeartBeats(device, t)
 	local txt = string.format("`%s` has been *%d %s* no heartbeat", device, ts, tunit)
 	log(txt)
 	local noticePrint = string.format("%d %s", ts, tunit)
-	if t[lastNotice] ~= noticePrint then
+	if t.lastNotice ~= noticePrint then
 		_M.postMessage(cfgSlack.RFIDHook, txt)
 	end
 	return noticePrint
