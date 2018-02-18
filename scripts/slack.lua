@@ -1,5 +1,7 @@
 local cfgSlack = RISK.Slack
 
+local toleranceSeconds = 5 * 60
+
 local _M = {}
 
 function _M.swapEvent(name, device, rfid)
@@ -20,7 +22,7 @@ function _M.noHeartBeats(device, t)
 	local ts = now - t.timestamp
 	log("TS:", ts, " LN:", t.lastNotice)
 
-	if ts < (6 * 10) then
+	if ts < toleranceSeconds then
 		return ""
 	end
 
