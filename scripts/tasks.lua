@@ -12,17 +12,22 @@ function _M.RFID(client, msg)
 	if err ~= nil then
 		logf("Error(%s+%s): %s", msg.Topic, msg.MessageID, err)
 	end
+	local topic = payload.topic
+	local token = ''
+	local displayName = ''
 	if data ~= nil then
-		token = client:Publish(payload.topic, 0, false, payload.token)
-		if token:Wait() and token:Error() ~= nil then
-			Log(token.Error())	
-		end
-		-- backward old version
-		if payload.device == nil then
-			payload.device = "Old Box"
-		end
-		slack.swapEvent(data.display_name, payload.device, payload.uid)
+		token = payload.token
+		displayName = data.display_name
 	end
+	token = client:Publish(topic, 0, false, token)
+	if token:Wait() and token:Error() ~= nil then
+		Log(token.Error())
+	end
+	-- backward old version
+	if payload.device == nil then
+		payload.device = "Old Box"
+	end
+	slack.swapEvent(displayName, payload.device, payload.uid)
 end
 
 beats = {}
