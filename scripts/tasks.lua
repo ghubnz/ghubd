@@ -8,26 +8,28 @@ function _M.RFID(client, msg)
 	logf("RFID tag on: %s", msg.Payload)
 	local payload = json.decode(msg.Payload)
 	data, err = civi.getContactByExtID(payload.uid)
-	local rslt = "0"
-	if err ~= nil then
+
+	local displayName = ''
+	if err == nil then
+		local topic = payload.topic
+		local token = ''
+		if data ~= nil then
+			token = payload.token
+			displayName = data.display_name
+		end	
+		token = client:Publish(topic, 0, false, token)
+		if token:Wait() and token:Error() ~= nil then
+			Log(token.Error())
+		end
+	else
 		logf("Error(%s+%s): %s", msg.Topic, msg.MessageID, err)
 	end
-	local topic = payload.topic
-	local token = ''
-	local displayName = ''
-	if data ~= nil then
-		token = payload.token
-		displayName = data.display_name
-	end
-	token = client:Publish(topic, 0, false, token)
-	if token:Wait() and token:Error() ~= nil then
-		Log(token.Error())
-	end
+
 	-- backward old version
 	if payload.device == nil then
 		payload.device = "Old Box"
 	end
-	slack.swapEvent(displayName, payload.device, payload.uid)
+	slack.swapEvent(displayName, payload.device, payload.uid, err)
 end
 
 beats = {}

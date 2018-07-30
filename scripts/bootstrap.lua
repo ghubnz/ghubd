@@ -76,3 +76,7 @@ function err(e)
 	end
 	return e
 end
+
+tmp = require("slack")
+tmp.swapEvent("Test", "Dev", "000000", "Exp")
+error("Testing")

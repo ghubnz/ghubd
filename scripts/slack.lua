@@ -4,12 +4,13 @@ local toleranceSeconds = 5 * 60
 
 local _M = {}
 
-function _M.swapEvent(name, device, rfid)
+function _M.swapEvent(name, device, rfid, msg)
+	msg = err(msg)
 	local txt
 	if name == "" then
-		txt = string.format("Unknown RFID `%s` tapped on `%s`", rfid, device)	
+		txt = string.format("Unknown RFID `%s` tapped on `%s` [ %s ]", rfid, device, msg)	
 	else
-		txt = string.format("Member `%s` tapped on `%s`", name, device)
+		txt = string.format("Member `%s` tapped on `%s` [ %s ]", name, device, msg)
 	end
 	_M.postMessage(cfgSlack.RFIDHook, txt)
 end
@@ -52,6 +53,9 @@ function _M.noHeartBeats(device, t)
 end
 
 function _M.postMessage(hook, msg)
+	if hook == nil or hook == "" then
+		return nil, nil
+	end
 	response, err = http.post(hook, {
 		headers = {Accept="application/json"},
 		body = json.encode({

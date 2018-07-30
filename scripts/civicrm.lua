@@ -2,15 +2,7 @@ local cfgCiviCRM = RISK.CiviCRM
 
 local _M = {}
 
-function _M.getContactByExtID(eid)
-	local params = {
-		entity="contact",
-		action="get",
-		key=cfgCiviCRM.siteKey,
-		api_key=cfgCiviCRM.userKey,
-		json=1,
-		external_identifier=eid,
-	}
+function civiCall(params)
 	local query = url.build_query_string(params)
 	response, err = http.get(cfgCiviCRM.API, {
 		query=query,
@@ -25,11 +17,71 @@ function _M.getContactByExtID(eid)
 	if data.is_error ~= 0 then
 		return nil, "" -- TODO extract error msg
 	end
+	return data, nil
+end
+
+function splitDate(d)
+	local date = {}
+	for i in d:gmatch("%d+") do
+		table.insert(date, i)
+	end
+	return date[1], date[2], date[3]
+end
+
+function _M.getContactByExtID(eid)
+	-- get contact
+	local params = {
+		entity="contact",
+		action="get",
+		key=cfgCiviCRM.siteKey,
+		api_key=cfgCiviCRM.userKey,
+		json=1,
+		external_identifier=eid,
+	}
+	data, err = civiCall(params)
+	if err ~= nil then
+		return nil, err
+	end
 	if data.count > 1 then
 		return nil, string.format("The external identifier is duplicated: %s", eid)
 	end
 	local key = next(data.values)
-	return data.values[key], nil
+	local contact = data.values[key]
+	if contact == nil then
+		return nil, "Contact not found"
+	end
+
+	-- get membership
+	local params = {
+		entity="Membership",
+		action="get",
+		key=cfgCiviCRM.siteKey,
+		api_key=cfgCiviCRM.userKey,
+		json=1,
+		contact_id = contact.contact_id,
+	}
+	data, err = civiCall(params)
+	if err ~= nil then
+		return nil, err
+	end
+	for i,v in pairs(data.values) do
+		if v.status_id == "4" then
+			return contact, "Expired"
+			--[[
+			if v.end_date ~= nil and v.end_date ~= "" then
+				local year, month, day = splitDate(v.end_date)
+
+				log(year, month, day)
+				local endDate = os.time{year=year, month=month, day=day}
+				if math.floor(os.difftime(os.time(), endDate) / (24 * 60 * 60)) < -10 then
+					return contact, "Expired"		
+				end
+			end
+			]]--
+		end
+		return contact, nil
+	end
+	return contact, "Membership not found"
 end
 
 return _M
