@@ -33,16 +33,16 @@ function _M.getContactByExtID(eid)
 		_M.save(data)
 	end
 	-- TODO Do we really want the expired function at the moment?
---[[
-	if data.end_date ~= nil and data.end_date ~= "" then
-		local year, month, day = splitDate(data.end_date)
-		local endDate = os.time{year=year, month=month, day=day}
-		if math.floor(os.difftime(os.time(), endDate) / (24 * 60 * 60)) < -10 then
-			return data, "Expired"               
-		end
-	else
-		return data, "Expired"
-	end	
---]]
+	if Expired then
+		if data.end_date ~= nil and data.end_date ~= "" then
+			local year, month, day = splitDate(data.end_date)
+			local endDate = os.time{year=year, month=month, day=day}
+			if math.floor(os.difftime(os.time(), endDate) / (24 * 60 * 60)) < -10 then
+				return data, "Expired"               
+			end
+		else
+			return data, "Expired"
+		end	
+	end
 	return data, nil
 end

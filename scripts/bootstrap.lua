@@ -11,6 +11,8 @@ slack = require("slack")
 -- global variables
 Prefix = "iot"
 
+Expired = false
+
 config.MQTT = {
 	{
 		Addr = RISK.MQTT.Addr,

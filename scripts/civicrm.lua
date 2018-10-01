@@ -64,8 +64,8 @@ function _M.getContactByExtID(eid)
 	if err ~= nil then
 		return nil, err
 	end
-	for i,v in pairs(data.values) do
-		if v.status_id == "4" then
+	for i,v in pairs(data.values) do		
+		if Expired and v.status_id == "4" then
 			return contact, "Expired"
 		end
 		contact.end_date = v.end_date
