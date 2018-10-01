@@ -1,4 +1,4 @@
-civi = require("civicrm")
+cache = require("cache")
 slack = require("slack")
 
 local _M = {}
@@ -7,7 +7,8 @@ function _M.RFID(client, msg)
 	-- {"uid":"","topic":"","token":""}
 	logf("RFID tag on: %s", msg.Payload)
 	local payload = json.decode(msg.Payload)
-	data, err = civi.getContactByExtID(payload.uid)
+	-- load from cache
+	data, err = cache.getContactByExtID(payload.uid)
 
 	local displayName = ''
 	if err == nil then

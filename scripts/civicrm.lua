@@ -67,18 +67,8 @@ function _M.getContactByExtID(eid)
 	for i,v in pairs(data.values) do
 		if v.status_id == "4" then
 			return contact, "Expired"
-			--[[
-			if v.end_date ~= nil and v.end_date ~= "" then
-				local year, month, day = splitDate(v.end_date)
-
-				log(year, month, day)
-				local endDate = os.time{year=year, month=month, day=day}
-				if math.floor(os.difftime(os.time(), endDate) / (24 * 60 * 60)) < -10 then
-					return contact, "Expired"		
-				end
-			end
-			]]--
 		end
+		contact.end_date = v.end_date
 		return contact, nil
 	end
 	return contact, "Membership not found"
